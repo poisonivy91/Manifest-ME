@@ -1,6 +1,30 @@
 import { NextResponse } from 'next/server';
 
+// Simple in-memory quota tracker (resets on server restart)
+let requestCount = 0;
+const DAILY_LIMIT = 100;
+let lastReset = Date.now();
+
+function resetQuotaIfNeeded() {
+  const now = Date.now();
+  // Reset every 24 hours
+  if (now - lastReset > 24 * 60 * 60 * 1000) {
+    requestCount = 0;
+    lastReset = now;
+  }
+}
+
 export async function POST(req) {
+  resetQuotaIfNeeded();
+
+  if (requestCount >= DAILY_LIMIT) {
+    return NextResponse.json({
+      error: 'Daily Gemini API quota reached. Please try again tomorrow to avoid extra charges.',
+    }, { status: 429 });
+  }
+
+  requestCount++;
+
   const body = await req.json();
   const entry = body.entry;
 
@@ -15,17 +39,16 @@ export async function POST(req) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-  contents: [
-    {
-      parts: [
-        {
-          text: `Write a short, uplifting affirmation in response to: "${entry}". The affirmation should be calming, supportive, and under 30 words.`
-        }
-      ]
-    }
-  ]
-})
-
+          contents: [
+            {
+              parts: [
+                {
+                  text: `Write a short, uplifting affirmation in response to: "${entry}". The affirmation should be calming, supportive, and under 30 words.`
+                }
+              ]
+            }
+          ]
+        })
       }
     );
 

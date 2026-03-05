@@ -8,6 +8,7 @@ export default function AIJournal() {
   const [loading, setLoading] = useState(false);
 
   const handleAskUniverse = async () => {
+    console.log("clicked", entry);
     if (!entry.trim()) return;
 
     setLoading(true);
@@ -21,6 +22,11 @@ export default function AIJournal() {
         },
         body: JSON.stringify({ entry }),
       });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`API ${res.status}: ${text}`);
+    }
 
       const data = await res.json();
       setResponse(data.output || "🌌 The universe is quiet. Try again.");

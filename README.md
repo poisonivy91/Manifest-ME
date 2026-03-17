@@ -86,9 +86,7 @@ Software Engineering Student | Frontend Developer
 
 ## Demo
 
-Watch the application in action:
-
-[Manifest Me Demo](./manifest-me.mp4)
+![Manifest Me Demo](./manifest-me-demo.gif)
 
 ## Getting Started
 

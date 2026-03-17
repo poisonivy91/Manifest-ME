@@ -109,4 +109,6 @@ Software Engineering Student | Aspiring Frontend Developer
 ## GitHub
 https://github.com/poisonivy91
 
-<video src="public/manifest me.mp4" controls width="700"></video>
+<video controls width="700">
+  <source src="https://raw.githubusercontent.com/poisonivy91/Manifest-ME/main/public/manifest%20me.mp4" type="video/mp4">
+</video>

@@ -1,18 +1,40 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+
+const COOLDOWN_MS = 12000;
+const LAST_REQUEST_KEY = 'manifest-me:lastAskUniverseAt';
 
 export default function AIJournal() {
   const [entry, setEntry] = useState('');
   const [response, setResponse] = useState('');
   const [loading, setLoading] = useState(false);
+  const [lastRequestAt, setLastRequestAt] = useState(0);
+
+  useEffect(() => {
+    const savedValue = Number(sessionStorage.getItem(LAST_REQUEST_KEY));
+    if (!Number.isNaN(savedValue) && savedValue > 0) {
+      setLastRequestAt(savedValue);
+    }
+  }, []);
 
   const handleAskUniverse = async () => {
     console.log("clicked", entry);
     if (!entry.trim()) return;
 
+    const now = Date.now();
+    const elapsed = now - lastRequestAt;
+
+    if (lastRequestAt > 0 && elapsed < COOLDOWN_MS) {
+      const secondsRemaining = Math.ceil((COOLDOWN_MS - elapsed) / 1000);
+      setResponse(`⏳ Please wait ${secondsRemaining}s before asking again.`);
+      return;
+    }
+
     setLoading(true);
     setResponse('');
+    setLastRequestAt(now);
+    sessionStorage.setItem(LAST_REQUEST_KEY, String(now));
 
     try {
       const res = await fetch('/api/ask-universe', {
@@ -22,14 +44,16 @@ export default function AIJournal() {
         },
         body: JSON.stringify({ entry }),
       });
-
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`API ${res.status}: ${text}`);
-    }
-
       const data = await res.json();
-      setResponse(data.output || "🌌 The universe is quiet. Try again.");
+
+      if (!res.ok) {
+        const errorText = data?.details
+          ? `${data.error || 'Something went wrong.'} ${data.details}`
+          : (data.error || 'Something went wrong.');
+        setResponse(`⚠️ ${errorText}`);
+      } else {
+        setResponse(data.output || "🌌 The universe is quiet. Try again.");
+      }
     } catch (err) {
       console.error("Error talking to Gemini route:", err);
       setResponse("⚠️ Couldn't reach the universe. Please try again later.");

@@ -1,97 +1,125 @@
-# 🌟 Manifest Me
+Manifest Me
 
-Manifest Me is a calming, AI-powered journaling and affirmation web app that helps users reflect on their mood, reduce anxiety, and receive supportive affirmations in real time.
+Manifest Me is a calming web application that helps users reflect on their emotions and receive supportive affirmations. The app combines journaling with AI-generated encouragement to promote mindfulness and emotional well-being.
 
-[🌀 Try it live → manifest-me-five.vercel.app](https://manifest-me-five.vercel.app)
+Live Demo
+https://manifest-me-five.vercel.app
 
----
+Overview
 
-## 🙋‍♀️ Who is it for?
+Manifest Me provides two core features:
 
-This app is designed for:
-- Anyone navigating stress, anxiety, or burnout
-- Students and professionals looking for daily affirmations
-- People interested in journaling, mindfulness, or self-reflection
-- Techies who want to explore how AI can support mental wellness
+Daily Affirmations
 
----
+Generates positive affirmations to help users start their day with encouragement.
 
-## ❓ Why was it built?
+Users can also add their own affirmations.
 
-Manifest Me was created to:
-- Give people a safe space to express how they feel
-- Use AI as a positive tool for emotional support
-- Explore modern UI/UX design with clean, intuitive interactions
-- Serve as a portfolio project demonstrating full-stack development with AI integration
+Ask the Universe
 
----
+Users can describe how they feel.
 
-## 🛠️ What’s it built with?
+The app sends the prompt to an AI API which returns a short supportive affirmation.
 
-- [Next.js 14+](https://nextjs.org/) (App Router)
-- [React](https://reactjs.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Google Gemini API](https://makersuite.google.com/app/apikey) (via secure server route)
-- [Vercel](https://vercel.com/) for hosting
-- [GitHub](https://github.com/poisonivy91/Manifest-ME) for version control
+The goal of this project was to explore how AI can be used responsibly to support mental wellness while maintaining a simple, calming user experience.
 
----
+Tech Stack
 
-## 🤖 AI Efficiency
+Frontend
 
-To ensure the app remains accessible to others:
-- Gemini responses are capped at **30 tokens**
-- Requests are rate-limited to **one every few seconds**
-- The API key is secured and never exposed in the frontend
+Next.js
 
-This keeps the experience **free** for me and for you 🫶
+React
 
----
+Tailwind CSS
 
-## 🧑‍💻 Want to Contribute?
+Backend
 
-Contributions are welcome! Feel free to fork this repo and submit a PR. Before doing so, please:
+Next.js API Routes
 
-1. Read the [Code of Conduct](#code-of-conduct)
-2. Create a clear [GitHub Issue](https://github.com/poisonivy91/Manifest-ME/issues) for bugs or ideas
+AI Integration
 
----
+Google Gemini API
 
-## 📜 Code of Conduct
+Deployment
 
-This project welcomes contributors of all backgrounds. Please keep feedback kind and constructive. Any form of hate speech, discrimination, or harassment will not be tolerated.
+Vercel
 
----
+Version Control
 
-## 🐞 Reporting Issues
+GitHub
 
-Spotted a bug? Here's how to report it:
+Key Features
 
-1. Go to the [Issues tab](https://github.com/poisonivy91/Manifest-ME/issues)
-2. Click **“New Issue”**
-3. Use the template to explain the bug or request a feature
+AI-powered affirmation generator
+User mood input with supportive AI response
+Daily affirmation generator
+Custom affirmation input
+Responsive UI with Tailwind CSS
+Secure API key handling through server-side routes
+Rate limiting to protect free API usage
 
----
+What I Learned
 
+Building this project helped me gain experience with:
 
+Creating server-side API routes in Next.js
 
-## 💫 Author
+Integrating third-party APIs securely
 
-👩‍💻 Created by [@poisonivy91](https://github.com/poisonivy91)  
-✨ Portfolio-powered and built with love, tech, and a little bit of cosmic magic.
+Managing environment variables for production deployments
 
----
+Handling API errors and rate limits gracefully
 
-## 🌐 Live Demo
+Designing a user-friendly interface with Tailwind CSS
 
-🔗 [https://manifest-me-five.vercel.app](https://manifest-me-five.vercel.app)
+Deploying full-stack applications using Vercel
 
+I also learned how important it is to build applications that fail gracefully when external services (like APIs) are unavailable.
 
-## 🛠️ Getting Started
+What I Would Improve
 
-Clone the repo:
+Future improvements for this project include:
 
-```bash
+Saving affirmation history for users
+
+Adding user accounts and authentication
+
+Improving AI prompt engineering for more personalized responses
+
+Adding mood tracking or journaling history
+
+Enhancing accessibility and UI polish
+
+Getting Started
+
+Clone the repository
+
 git clone https://github.com/poisonivy91/Manifest-ME.git
 cd Manifest-ME
+
+Install dependencies
+
 npm install
+
+Create a .env.local file
+
+GEMINI_API_KEY=your_api_key_here
+
+Run the development server
+
+npm run dev
+
+Then open:
+
+http://localhost:3000
+
+Author
+
+Shaina Bowser
+Software Engineering Student | Aspiring Frontend Developer
+
+GitHub
+https://github.com/poisonivy91
+
+<video src="public/manifest me.mp4" control width="700"></video>

@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 // Simple in-memory quota tracker (resets on server restart)
 let requestCount = 0;
-const DAILY_LIMIT = 100;
+const DAILY_LIMIT = 25;
 let lastReset = Date.now();
 
 function resetQuotaIfNeeded() {
@@ -23,16 +23,30 @@ export async function POST(req) {
     }, { status: 429 });
   }
 
-  requestCount++;
-
-  const body = await req.json();
-  const entry = body.entry;
-
   const apiKey = process.env.GEMINI_API_KEY;
 
+  if (!apiKey) {
+    return NextResponse.json(
+      { error: 'Missing GEMINI_API_KEY environment variable.' },
+      { status: 500 }
+    );
+  }
+
+  requestCount++;
+
   try {
+    const body = await req.json();
+    const entry = body.entry;
+
+    if (!entry || !entry.trim()) {
+      return NextResponse.json(
+        { error: 'Entry is required.' },
+        { status: 400 }
+      );
+    }
+
     const geminiRes = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
       {
         method: 'POST',
         headers: {
@@ -43,21 +57,65 @@ export async function POST(req) {
             {
               parts: [
                 {
-                  text: `Write a short, uplifting affirmation in response to: "${entry}". The affirmation should be calming, supportive, and under 30 words.`
+                  text: `Write one calming, supportive affirmation in response to: "${entry}". Return one complete sentence between 12 and 22 words.`
                 }
               ]
             }
-          ]
+          ],
+          generationConfig: {
+            maxOutputTokens: 120,
+            temperature: 0.8,
+            thinkingConfig: {
+              thinkingBudget: 0
+            }
+          }
         })
       }
     );
 
-    const result = await geminiRes.json();
-    console.log("Gemini raw result:", JSON.stringify(result, null, 2));
+    const rawText = await geminiRes.text();
 
-    const text = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!geminiRes.ok) {
+      let details = rawText;
 
-    return NextResponse.json({ output: text || '🌌 No wisdom from the stars today.' });
+      try {
+        const upstream = JSON.parse(rawText);
+        details = upstream?.error?.message || rawText;
+      } catch {
+        // Keep raw text when upstream payload is not JSON.
+      }
+
+      return NextResponse.json(
+        { error: `Gemini API error: ${geminiRes.status}`, details },
+        { status: geminiRes.status }
+      );
+    }
+
+    let result;
+    try {
+      result = JSON.parse(rawText);
+    } catch {
+      return NextResponse.json(
+        { error: 'Gemini returned invalid JSON.', details: rawText },
+        { status: 500 }
+      );
+    }
+
+    const text =
+      result?.candidates?.[0]?.content?.parts
+        ?.map(part => (typeof part?.text === 'string' ? part.text : ''))
+        ?.filter(Boolean)
+        ?.join(' ')
+        ?.trim() || '';
+
+    if (!text) {
+      return NextResponse.json(
+        { error: 'Gemini returned no text.', raw: result },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json({ output: text });
   } catch (err) {
     console.error('Gemini API Error:', err);
     return NextResponse.json({ error: 'Gemini API request failed.' }, { status: 500 });

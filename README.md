@@ -82,7 +82,13 @@ Potential improvements include:
 ---
 ## Author
 -Shaina Bowser
--Software Engineering Student | Aspiring Frontend Developer
+Software Engineering Student | Frontend Developer
+
+## Demo
+
+Watch the application in action:
+
+[Manifest Me Demo](./manifest-me.mp4)
 
 ## Getting Started
 

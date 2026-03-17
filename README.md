@@ -86,7 +86,7 @@ Software Engineering Student | Frontend Developer
 
 ## Demo
 
-![Manifest Me Demo](./manifest-me-demo.gif)
+![Manifest Me Demo](public/manifest-me-demo.gif)
 
 ## Getting Started
 

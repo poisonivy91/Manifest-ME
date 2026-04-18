@@ -1,6 +1,8 @@
-# Manifest Me
+# Manifest Me — AI-Powered Web Application
 
-Manifest Me is a calming web application that helps users reflect on their emotions and receive supportive affirmations. The app combines journaling with AI-generated encouragement to promote mindfulness and emotional well-being.
+A full-stack Next.js application that allows users to reflect on their emotions and receive AI-generated affirmations using the Google Gemini API.
+
+This project demonstrates API integration, server-side routing, error handling, and building a user-focused experience.
 
 🔗 Live Demo  
 https://manifest-me-five.vercel.app
